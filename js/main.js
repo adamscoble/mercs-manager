@@ -41,7 +41,7 @@ $(function(){
             $addButton: this.$holdings.find('.row-add a')
         };
 
-        this.savedData = JSON.parse(localStorage.getItem("savedData"));
+        this.savedData = JSON.parse(localStorage.getItem("mercsManagerSavedData"));
 
         this._init();
     }
@@ -485,7 +485,7 @@ $(function(){
                 this.savedData.moves = {};
             }
 
-            localStorage.setItem("savedData", JSON.stringify(this.savedData));
+            localStorage.setItem("mercsManagerSavedData", JSON.stringify(this.savedData));
         }
     };
 

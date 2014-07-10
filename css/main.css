@@ -33,13 +33,15 @@ h1.massive { font-size: 130px; }
 	.nav-tabs.nav-justified >.active > a,
 	.nav-tabs.nav-justified > .active > a:hover,
 	.nav-tabs.nav-justified > .active > a:focus { border-bottom: 0; }
+  .team-name { max-width: 0; }
 }
 
 .uppercase { text-transform: uppercase; }
 
 input.error { border-color: #a94442;}
 
-
+.ellipsis { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.team-name { max-width: 100px; }
 
 
 
