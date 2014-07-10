@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Mercs Manager</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!-- <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"> -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon" href="apple-touch-icon-precomposed.png">
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/main.css">
+
+    <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <ul class="nav nav-tabs nav-justified" role="tablist">
+            <li class="active"><a href="#moves" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-map-marker"></span><span class="hidden-xs"> Moves</span></a></li>
+            <li><a href="#resources" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-usd"></span><span class="hidden-xs"> Resources</span></a></li>
+            <li><a href="#team" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-user"></span><span class="hidden-xs"> Team</span></a></li>
+            <li><a href="#holdings" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-globe"></span><span class="hidden-xs"> Holdings</span></a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade in active" id="moves">
+                <div class="row clearfix">
+                    <div class="col-xs-12 text-center">
+                        <h1>Moves</h1>
+                    </div>
+                </div>
+                <div id="move-inputs" class="move-stage fade in">
+                    <div class="row clearfix fade in">
+                        <div class="col-xs-6">
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-addon">1</span>
+                                <input id="move-first-input" type="text" class="form-control uppercase" placeholder="A1">
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-addon">2</span>
+                                <input id="move-second-input" type="text" class="form-control uppercase" placeholder="B1">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="panel-group" id="accordion">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#research-teams">
+                                                Research Teams
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="research-teams" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <table class="table table-striped">  
+                                                <thead>  
+                                                    <tr>  
+                                                        <th>Round</th>  
+                                                        <th>From</th>  
+                                                        <th>To</th>    
+                                                        <th></th>    
+                                                    </tr>  
+                                                </thead>  
+                                                <tbody>   
+                                                    <tr class="row-add">
+                                                        <td><input id="research-move-input-round" type="number" class="form-control text-left uppercase" placeholder="1" data-field="research-move-round" data-validate="round"></td>  
+                                                        <td><input id="research-move-input-from" type="text" class="form-control text-left uppercase" placeholder="A1" data-field="research-move-from" data-validate="move"></td>  
+                                                        <td><input id="research-move-input-to" type="text" class="form-control text-left uppercase" placeholder="A2" data-field="research-move-to" data-validate="move"></td>  
+                                                        <td class="text-right"><a id="research-move-input-add" class="btn btn-success"><span class="glyphicon glyphicon-plus-sign"></span></a></td>  
+                                                    </tr> 
+                                                    <tr class="research-move row-template hide" data-index="0">
+                                                        <td class="research-move-round">1</td>  
+                                                        <td class="research-move-from">A1</td>  
+                                                        <td class="research-move-to">A2</td>  
+                                                        <td class="text-right"><a class="btn btn-danger row-remove"><span class="glyphicon glyphicon-remove"></span></a></td>
+                                                    </tr>
+                                                </tbody>  
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row clearfix">
+                        <div class="col-xs-12">
+                            <a id="ready-btn" class="btn btn-success btn-lg btn-block">Ready</a>
+                        </div>
+                    </div>
+                </div>
+                <div id="moves-show" class="move-stage fade">
+                    <div class="row clearfix">
+                        <div class="col-xs-12">
+                            <a id="show-btn" class="btn btn-primary btn-lg btn-block">Show</a>
+                        </div>
+                    </div>
+                </div>
+                <div id="moves-final" class="move-stage fade">
+                    <div class="row">
+                        <div id="round-1" class="col-sm-6 text-center">
+                            <h1 id="move-first" class="massive">A1</h1>
+                        </div>
+                        <div id="round-2" class="col-sm-6 text-center">
+                            <h1 id="move-second" class="massive">A1</h1>
+                        </div>
+                        <h3 class="research-move-item research-move-template hide"><span class="research-from">A1</span> <span class="glyphicon glyphicon-arrow-right"></span> <span class="research-to">A2</span><h3>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <a id="done-btn" class="btn btn-primary btn-lg btn-block">Done</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="resources">
+                <div class="row clearfix">
+                    <div class="col-xs-12 text-center">
+                        <h1>Resources</h1>
+                    </div>
+                </div>
+                <div class="row clearfix">
+                    <div class="col-xs-6">
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-usd"></span></span>
+                            <input id="resources-money" type="text" class="form-control" placeholder="0">
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-briefcase"></span></span>
+                            <input id="resources-research" type="text" class="form-control" placeholder="0">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div id="team-check" class="alert alert-warning" role="alert">
+                            <button type="button" class="close"><span class="glyphicon glyphicon-ok"></span></button>
+                            <strong>Warning!</strong><br>
+                            Ensure your team roster is up to date. Click here to confirm.
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <a id="auto-upkeep" class="btn btn-warning btn-lg btn-block disabled">Auto-subtract Upkeep</a>
+                    </div>
+                </div> 
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div id="holdings-check" class="alert alert-warning" role="alert">
+                            <button type="button" class="close"><span class="glyphicon glyphicon-ok"></span></button>
+                            <strong>Warning!</strong><br>
+                            Ensure your holdings are up to date. Click here to confirm.
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <a id="auto-holdings" class="btn btn-warning btn-lg btn-block disabled">Auto-add Holdings</a>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="team">
+                <div class="row clearfix">
+                    <div class="col-xs-12 text-center">
+                        <h1>Team</h1>
+                    </div>
+                </div>
+                <table class="table table-striped">  
+                    <thead>  
+                        <tr>  
+                            <th>Soldier</th>  
+                            <th>Kills</th>  
+                            <th></th>  
+                            <th>Upkeep</th>  
+                            <th></th>  
+                        </tr>  
+                    </thead>  
+                    <tbody>   
+                        <tr class="row-add">
+                            <td><input type="text" class="form-control text-left" placeholder="Name" data-field="team-name"></td>  
+                            <td>0</td>  
+                            <td></td>  
+                            <td><input type="number" class="form-control text-left" placeholder="1" data-field="team-upkeep" data-validate="number"></td>  
+                            <td class="text-right"><a class="btn btn-success"><span class="glyphicon glyphicon-plus-sign"></span></a></td>  
+                        </tr> 
+                        <tr class="team-member row-template hide" data-index="0">  
+                            <td class="team-name">Name</td>  
+                            <td class="kill-count">0</td>  
+                            <td>
+                                <a class="btn btn-warning subtract-kill"><span class="glyphicon glyphicon-minus-sign"></span></a>
+                                <a class="btn btn-success add-kill"><span class="glyphicon glyphicon-plus-sign"></span></a>
+                            </td>  
+                            <td class="team-upkeep">0</td>  
+                            <td class="text-right"><a class="btn btn-danger row-remove"><span class="glyphicon glyphicon-remove"></span></a></td>  
+                        </tr> 
+                    </tbody>  
+                </table> 
+            </div>
+            <div class="tab-pane fade" id="holdings">
+                <div class="row clearfix">
+                    <div class="col-xs-12 text-center">
+                        <h1>Holdings</h1>
+                    </div>
+                </div>
+                <table class="table table-striped">  
+                    <thead>  
+                        <tr>  
+                            <th>Money</th>  
+                            <th>Research</th>  
+                            <th></th>   
+                        </tr>  
+                    </thead>  
+                    <tbody>   
+                        <tr class="row-add">
+                            <td><input type="number" class="form-control text-left" placeholder="Money" data-field="holding-money" data-validate="number"></td>  
+                            <td><input type="number" class="form-control text-left" placeholder="Research" data-field="holding-research" data-validate="number"></td>  
+                            <td class="text-right"><a class="btn btn-success"><span class="glyphicon glyphicon-plus-sign"></span></a></td>  
+                        </tr> 
+                        <tr class="holding row-template hide" data-index="0">
+                            <td class="holding-money">0</td>  
+                            <td class="holding-research">0</td>  
+                            <td class="text-right"><a class="btn btn-danger row-remove"><span class="glyphicon glyphicon-remove"></span></a></td>
+                        </tr>
+                    </tbody>  
+                </table>
+            </div>
+        </div>
+        
+
+        
+        
+
+        <!-- <select class="form-control input-lg">
+            <option>hey</option>
+            <option>hey</option>
+            <option>hey</option>
+        </select> -->
+        
+    </div>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.0.min.js"><\/script>')</script>
+
+    <script src="js/vendor/bootstrap.min.js"></script>
+
+    <script src="js/plugins.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
