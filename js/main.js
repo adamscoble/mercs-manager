@@ -168,6 +168,7 @@ $(function(){
                 movesElems.$movesShow.removeClass('in');
                 movesElems.$movesFinal.removeClass('in');
                 mm.save();
+                $("html, body").animate({ scrollTop: 0 }, 500);
             });
         },
         _initResources : function(){

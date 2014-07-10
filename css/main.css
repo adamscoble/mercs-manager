@@ -41,7 +41,7 @@ h1.massive { font-size: 130px; }
 input.error { border-color: #a94442;}
 
 .ellipsis { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.team-name { max-width: 100px; }
+.team-name { max-width: 80px; }
 
 
 
