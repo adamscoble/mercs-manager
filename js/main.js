@@ -1,4 +1,5 @@
 $(function(){
+    "use strict";
     function MercsManager(){
         this.$html = $('html');
         this.$moves = $('#moves');
@@ -313,8 +314,8 @@ $(function(){
         _initTeam : function(){
             this.$team.find('#sortable').sortable({items: '.team-member:not(.row-template)', axis: 'y', handle: '.handle', stop: $.proxy(this.save, this) }).disableSelection();
             this.team.$editBtn.on('click', $.proxy(this._toggleTeamEditMode, this));
-            this.team.$playerTeam.on('change',  $.proxy(this._handleTeamSelect, this));
-            this.team.$teamDropdown.on('change', $.proxy(this._handleTeamDropdown, this));
+            this.team.$playerTeam.on('change blur',  $.proxy(this._handleTeamSelect, this));
+            this.team.$teamDropdown.on('change blur', $.proxy(this._handleTeamDropdown, this));
             this.team.$addTeamBtn.on('click', $.proxy(this._handleAddTeamDropdownBtn, this));
             this.team.$addTeamMinimum.on('click', $.proxy(this._handleAddTeamMinimumChecked, this));
             this.$html.on('click', 'a.add-kill', { mm: this },this._addKill);
@@ -325,6 +326,8 @@ $(function(){
             this.$team.toggleClass('edit');
         },
         _handleTeamSelect : function(e){
+            if(this.team.$playerTeam.val() === ''){ return; }
+
             var $specialists = this.team.$specialistOptions.find('.' + this.team.$playerTeam.val());
             this.team.$specialistArea.empty();
             this.team.$specialistArea.append($specialists);
@@ -384,13 +387,13 @@ $(function(){
                 var currentMoney = parseInt(this.resources.$resourcesMoney.val(), 10),
                     currentResearch = parseInt(this.resources.$resourcesResearch.val(), 10);
 
-                if(currentMoney < data.cost){
+                if(currentMoney <= data.cost){
                     this.resources.$resourcesMoney.val('0');
                 } else {
                     this.setMoney(-data.cost);
                 }
 
-                if(currentResearch < data.research){
+                if(currentResearch <= data.research){
                     this.resources.$resourcesResearch.val('0');
                 } else {
                     this.setResearch(-data.research);
@@ -500,6 +503,8 @@ $(function(){
             this.savedData = {
                 money: 0,
                 research: 0,
+                vp: 0,
+                playerTeam: '',
                 team: [],
                 holdings: [],
                 hasMoves: false,
