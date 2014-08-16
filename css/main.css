@@ -19,6 +19,7 @@ h1.massive { font-size: 130px; }
 
 .edit-hidden { display: none; }
 .edit .edit-hidden { display: block; }
+.edit .hide-on-edit { display: none; }
 
 .table-striped > tbody > tr > td { vertical-align: middle; }
 

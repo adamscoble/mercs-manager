@@ -224,7 +224,7 @@
                             <th></th>  
                         </tr>  
                     </thead>  
-                    <tbody>   
+                    <tbody id="sortable">   
                         <tr class="row-add">
                             <td><input type="text" class="form-control text-left" placeholder="Name" data-field="team-name"></td>  
                             <td>0</td>  
@@ -240,7 +240,10 @@
                                 <a class="btn btn-success add-kill"><span class="glyphicon glyphicon-plus-sign"></span></a>
                             </td>  
                             <td class="team-upkeep">0</td>  
-                            <td class="text-right"><a class="btn btn-danger row-remove"><span class="glyphicon glyphicon-remove"></span></a></td>  
+                            <td class="text-right">
+                                <a class="btn btn-danger row-remove hide-on-edit"><span class="glyphicon glyphicon-remove"></span></a>
+                                <a class="btn btn-info handle edit-hidden"><span class="glyphicon glyphicon-resize-vertical"></span></a>
+                            </td>  
                         </tr> 
                     </tbody>  
                 </table> 

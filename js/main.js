@@ -311,6 +311,7 @@ $(function(){
             this.save();
         },
         _initTeam : function(){
+            this.$team.find('#sortable').sortable({axis: 'y', handle: '.handle', stop: $.proxy(this.save, this) }).disableSelection();
             this.team.$editBtn.on('click', $.proxy(this._toggleTeamEditMode, this));
             this.team.$playerTeam.on('change',  $.proxy(this._handleTeamSelect, this));
             this.team.$teamDropdown.on('change', $.proxy(this._handleTeamDropdown, this));
@@ -338,7 +339,7 @@ $(function(){
         _clearTeamDropdown : function(){
             this.team.$teamDropdown.val('');
             this._handleTeamDropdown();
-        }
+        },
         _handleTeamDropdown : function(){
             if(this.team.$teamDropdown.val() !== ''){
                 this.team.$addTeamName.val('').removeClass('hidden');
