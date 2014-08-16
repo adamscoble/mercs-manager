@@ -12,9 +12,19 @@ input { text-align: center; }
 
 h1.massive { font-size: 130px; }
 
+.edit-btn { position: absolute; top: 0; right: 15px; }
+
+.input-group-addon.btn-pad { padding-top: 5px; padding-bottom: 5px; display: none; }
+.edit .input-group-addon.btn-pad { display: table-cell; }
+
+.edit-hidden { display: none; }
+.edit .edit-hidden { display: block; }
+
 .table-striped > tbody > tr > td { vertical-align: middle; }
 
 .kill-count { padding-right: 20px; }
+
+#add-team-errors ul { padding-left: 15px; }
 
 .tab-content {
     border-left: 1px solid #ddd;

@@ -20,18 +20,38 @@ $(function(){
 
         this.$resources = $('#resources');
         this.resources = {
+            $editBtn: this.$resources.find('.edit-btn'),
             $autoUpkeep: this.$resources.find('#auto-upkeep'),
             $autoHoldings: this.$resources.find('#auto-holdings'),
+            $resourcesVictoryPoints: this.$resources.find('#resources-victorypoints'),
+            $addVPBtn: this.$resources.find('#add-vp'),
+            $subtractVPBtn: this.$resources.find('#subtract-vp'),
             $resourcesMoney: this.$resources.find('#resources-money'),
+            $addMoneyBtn: this.$resources.find('#add-money'),
+            $subtractMoneyBtn: this.$resources.find('#subtract-money'),
             $resourcesResearch: this.$resources.find('#resources-research'),
+            $addResearchBtn: this.$resources.find('#add-research'),
+            $subtractResearchBtn: this.$resources.find('#subtract-research'),
             $teamCheck: this.$resources.find('#team-check'),
             $holdingsCheck: this.$resources.find('#holdings-check')
         };
         this.$team = $('#team');
         this.team = {
+            $editBtn: this.$team.find('.edit-btn'),
+            $playerTeam: this.$team.find('#player-team'),
             $nameField: this.$team.find('.row-add input[data-field="team-name"]'),
             $upkeepField: this.$team.find('.row-add input[data-field="team-upkeep"]'),
-            $addButton: this.$team.find('.row-add a')
+            $addButton: this.$team.find('.row-add a'),
+            $teamDropdown: this.$team.find('#team-dropdown'),
+            $specialistArea: this.$team.find('#specialist-area'),
+            $specialistOptions: this.$team.find('#specialist-options'),
+            $addTeam: this.$team.find('#add-team-dropdown'),
+            $addTeamName: this.$team.find('#add-team-name'),
+            $addTeamNameInput: this.$team.find('#add-team-name-input'),
+            $addTeamBtn: this.$team.find('#add-team-dropdown-btn'),
+            $addTeamErrors: this.$team.find('#add-team-errors'),
+            $addTeamMinimum: this.$team.find('#add-team-minimum'),
+            $minimumTeamCheck: this.$team.find('#minimum-team-check')
         };
 
         this.$holdings = $('#holdings');
@@ -172,12 +192,36 @@ $(function(){
             });
         },
         _initResources : function(){
+            this.resources.$editBtn.on('click', $.proxy(this._toggleResourceEditMode, this));
+            this.resources.$subtractVPBtn.on('click', $.proxy(this._handleAddVP, this, -1));
+            this.resources.$addVPBtn.on('click', $.proxy(this._handleAddVP, this, 1));
+            this.resources.$subtractMoneyBtn.on('click', $.proxy(this._handleAddMoney, this, -1));
+            this.resources.$addMoneyBtn.on('click', $.proxy(this._handleAddMoney, this, 1));
+            this.resources.$subtractResearchBtn.on('click', $.proxy(this._handleAddResearch, this, -1));
+            this.resources.$addResearchBtn.on('click', $.proxy(this._handleAddResearch, this, 1));
             this.resources.$teamCheck.on('click', $.proxy(this._handleTeamChecked, this));
             this.resources.$holdingsCheck.on('click', $.proxy(this._handleHoldingsChecked, this));
             this.resources.$autoUpkeep.on('click', $.proxy(this._handleAutoUpkeep, this));
             this.resources.$autoHoldings.on('click', $.proxy(this._handleAutoHoldings, this));
+            this.resources.$resourcesVictoryPoints.on('change', $.proxy(this._resourceChanged, this));
             this.resources.$resourcesMoney.on('change', $.proxy(this._resourceChanged, this));
             this.resources.$resourcesResearch.on('change', $.proxy(this._resourceChanged, this));
+        },
+        _toggleResourceEditMode : function(){
+            this.resources.$editBtn.toggleClass('active');
+            this.$resources.toggleClass('edit');
+        },
+        _handleAddVP : function(value){
+            this.setVP(value);
+            this.save();
+        },
+        _handleAddMoney : function(value){
+            this.setMoney(value);
+            this.save();
+        },
+        _handleAddResearch : function(value){
+            this.setResearch(value);
+            this.save();
         },
         _handleTeamChecked : function(){
             this._handleChecked(this.resources.$teamCheck, this.resources.$autoUpkeep);
@@ -261,13 +305,105 @@ $(function(){
             $button.addClass('disabled');
         },
         _resourceChanged : function(){
+            this.resources.$resourcesVictoryPoints.val(this.resources.$resourcesVictoryPoints.val().replace(/[^\d.]/g, ""));
             this.resources.$resourcesMoney.val(this.resources.$resourcesMoney.val().replace(/[^\d.]/g, ""));
             this.resources.$resourcesResearch.val(this.resources.$resourcesResearch.val().replace(/[^\d.]/g, ""));
             this.save();
         },
         _initTeam : function(){
+            this.team.$editBtn.on('click', $.proxy(this._toggleTeamEditMode, this));
+            this.team.$playerTeam.on('change',  $.proxy(this._handleTeamSelect, this));
+            this.team.$teamDropdown.on('change', $.proxy(this._handleTeamDropdown, this));
+            this.team.$addTeamBtn.on('click', $.proxy(this._handleAddTeamDropdownBtn, this));
+            this.team.$addTeamMinimum.on('click', $.proxy(this._handleAddTeamMinimumChecked, this));
             this.$html.on('click', 'a.add-kill', { mm: this },this._addKill);
             this.$html.on('click', 'a.subtract-kill', { mm: this }, this._subtractKill);
+        },
+        _toggleTeamEditMode : function(){
+            this.team.$editBtn.toggleClass('active');
+            this.$team.toggleClass('edit');
+        },
+        _handleTeamSelect : function(e){
+            var $specialists = this.team.$specialistOptions.find('.' + this.team.$playerTeam.val());
+            this.team.$specialistArea.empty();
+            this.team.$specialistArea.append($specialists);
+            
+            this.save();
+        },
+        _setTeam : function(team){
+            this.team.$playerTeam.val(team);
+            this.$team.addClass(team);
+            this._handleTeamSelect();
+        },
+        _clearTeamDropdown : function(){
+            this.team.$teamDropdown.val('');
+            this._handleTeamDropdown();
+        }
+        _handleTeamDropdown : function(){
+            if(this.team.$teamDropdown.val() !== ''){
+                this.team.$addTeamName.val('').removeClass('hidden');
+                this.team.$addTeam.removeClass('hidden').find('.unit-name').text(this.team.$teamDropdown.val());
+                this.team.$addTeamMinimum.addClass('hidden');
+                this.team.$minimumTeamCheck.removeClass('alert-success').addClass('alert-warning');
+                this.team.$addTeamErrors.addClass('hidden');
+                this.team.$addTeamBtn.removeClass('disabled');
+            } else {
+                this.team.$addTeam.addClass('hidden');
+                this.team.$addTeamName.addClass('hidden');
+            }
+        },
+        _handleAddTeamDropdownBtn : function(){
+            var $option = this.team.$teamDropdown.find(':selected'),
+                data = $option.data(),
+                errors = '',
+                isForMinimumArmy = this.team.$minimumTeamCheck.hasClass('alert-success');
+
+            if(parseInt(this.resources.$resourcesResearch.val(), 10) < data.research){
+                errors += '<li>Not enough research.</li>';
+            }
+
+            if(parseInt(this.resources.$resourcesMoney.val(), 10) < data.cost){
+                errors += '<li>Not enough money.</li>';
+            }
+            
+            if(errors !== '' && !isForMinimumArmy){
+                this.team.$addTeamErrors.removeClass('hidden').find('ul').empty().append(errors);
+
+                if(data.free){
+                    this.team.$minimumTeamCheck.removeClass('alert-success').addClass('alert-warning');
+                    this.team.$addTeamMinimum.removeClass('hidden');
+                    this.team.$addTeamBtn.addClass('disabled');
+                }
+            } else {
+                this.team.$addTeamMinimum.addClass('hidden');
+                this.team.$minimumTeamCheck.removeClass('alert-success').addClass('alert-warning');
+
+                this.team.$addTeamErrors.addClass('hidden');
+
+                var currentMoney = parseInt(this.resources.$resourcesMoney.val(), 10),
+                    currentResearch = parseInt(this.resources.$resourcesResearch.val(), 10);
+
+                if(currentMoney < data.cost){
+                    this.resources.$resourcesMoney.val('0');
+                } else {
+                    this.setMoney(-data.cost);
+                }
+
+                if(currentResearch < data.research){
+                    this.resources.$resourcesResearch.val('0');
+                } else {
+                    this.setResearch(-data.research);
+                }
+
+                var name = this.team.$addTeamNameInput.val() === '' ? $option.val() : this.team.$addTeamNameInput.val() + ' (' + $option.val() + ')';
+                this.team.$nameField.val(name);
+                this.team.$upkeepField.val(data.upkeep);
+                this.team.$addButton.click();
+                this.save();
+            }
+        },
+        _handleAddTeamMinimumChecked : function(){
+            this._handleChecked(this.team.$minimumTeamCheck, this.team.$addTeamBtn);
         },
         _addKill : function(e){
             var $btn = $(e.currentTarget),
@@ -428,8 +564,11 @@ $(function(){
             var mm = this,
                 save = this.savedData;
 
+            this.resources.$resourcesVictoryPoints.val(save.vp);
             this.resources.$resourcesMoney.val(save.money);
             this.resources.$resourcesResearch.val(save.research);
+
+            this._setTeam(save.playerTeam);
 
             $.each(save.team, function(i, member){
                 mm.team.$nameField.val(member.name);
@@ -465,6 +604,9 @@ $(function(){
                 mm.movesElems.$researchInputAdd.click();
             });
         },
+        setVP : function(amount){
+            this._setResource(this.resources.$resourcesVictoryPoints, amount);
+        },
         setMoney : function(amount){
             this._setResource(this.resources.$resourcesMoney, amount);
         },
@@ -473,11 +615,13 @@ $(function(){
         },
         save : function(){
             this.savedData = {
+                vp: parseInt(this.resources.$resourcesVictoryPoints.val(), 10),
                 money: parseInt(this.resources.$resourcesMoney.val(), 10),
                 research: parseInt(this.resources.$resourcesResearch.val(), 10),
+                playerTeam: this.team.$playerTeam.val(),
                 team: this._getTeamMembers(),
                 holdings: this._getHoldings(),
-                hasMoves: this.movesElems.$movesFinal.hasClass('in'),
+                hasMoves: this.movesElems.$movesFinal.hasClass('in')
             };
 
             if(this.savedData.hasMoves){
