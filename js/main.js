@@ -311,7 +311,7 @@ $(function(){
             this.save();
         },
         _initTeam : function(){
-            this.$team.find('#sortable').sortable({axis: 'y', handle: '.handle', stop: $.proxy(this.save, this) }).disableSelection();
+            this.$team.find('#sortable').sortable({items: '.team-member:not(.row-template)', axis: 'y', handle: '.handle', stop: $.proxy(this.save, this) }).disableSelection();
             this.team.$editBtn.on('click', $.proxy(this._toggleTeamEditMode, this));
             this.team.$playerTeam.on('change',  $.proxy(this._handleTeamSelect, this));
             this.team.$teamDropdown.on('change', $.proxy(this._handleTeamDropdown, this));
